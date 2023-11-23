@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificación de Animales</title>
+</head>
+
+<body>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+    <form id="miFormulario" enctype="multipart/form-data">
+        <input type="button" id="capturar" value="Capturar Imagen">
+    </form>
+    <p id="response"></p>
+
+    <script>
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                var video = document.getElementById('video');
+                video.srcObject = stream;
+            })
+            .catch(function (err) {
+                console.log("Error: " + err);
+            });
+
+        document.getElementById('capturar').addEventListener('click', function () {
+            var video = document.getElementById('video');
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+
+            // Captura la imagen del video y la dibuja en el canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convierte la imagen del canvas a un blob para enviarla al servidor
+            canvas.toBlob(function (blob) {
+                var formData = new FormData();
+                formData.append('file', blob, 'captura.png');
+
+                // Realiza la solicitud al servidor FastAPI
+                fetch('http://127.0.0.1:8000/', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('response').innerText = 'Predicción: ' + data.mensaje;
+                    })
+                    .catch(error => console.error('Error:', error));
+            }, 'image/png');
+        });
+    </script>
+</body>
+
+</html>
