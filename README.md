@@ -1,10 +1,9 @@
-# perrosgatos
-Proyecto simple de inferencia entre perros y gatos basado en imagenes en tiempo real.
+# Proyecto simple de inferencia entre perros y gatos basado en imagenes en tiempo real.
 
 Herramientas:
-Inferenia => Keras de Tensorflow entrenado
-Frontend => HTML y Javascript
-Backend => FastAPI
+- Inferenia: modelo de Keras de Tensorflow entrenado
+- Frontend: HTML y Javascript
+- Backend: FastAPI
 
 Para instalar todas las librerias necesarias escribir "pip install -r requirements.txt"
 
